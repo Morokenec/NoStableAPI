@@ -12,11 +12,12 @@ def root():
     settings = services.load_settings()
 
     for setting in settings:
-        if  setting['error_count']!= 0 and ip_address == setting['ip']:
+        if  setting['error_count'] != 0 and ip_address == setting['ip']:
             time.sleep(setting['timeout'])
             setting['error_count'] -= 1
             services.save_settings(settings)
             return "<h1>Bad Request 502</h1>", 502
+        
         else:
             setting['error_count'] = setting['limit_error']
             services.save_settings(settings)
@@ -42,17 +43,18 @@ def settings():
                 setting['limit_error'] = int(limit_error)
                 setting['timeout'] = int(timeout)
                 services.save_settings(settings)
-                return redirect(url_for('/'))
+                return redirect(url_for('root'))
         
         new_setting = {
-        'ip': ip,
-        'limit_error': int(limit_error),
-        'timeout': int(timeout),
-        'error_count': 0 
+            'ip': ip,
+            'limit_error': int(limit_error),
+            'timeout': int(timeout),
+            'error_count': 0 
         }
+
         settings.append(new_setting)
         services.save_settings(settings)
-        return redirect('/')
+        return redirect(url_for('root'))
 
     return render_template('index.html')
 
