@@ -1,11 +1,16 @@
-class Settings:
-    def __init__(self, error:int, timeout:int):
-        self.error = error
-        self.timeout = timeout
-    
-    def edit_error(self, count):
-        self.error - count
+import json
 
-    def get_error(self):
-        return self.error
-        
+SETTINGS_FILE = 'tabels.json'
+
+def load_settings():
+    try:
+        with open(SETTINGS_FILE, 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {"ip": "127.0.0.1", "error_count": 3, "timeout": 1}
+    except json.JSONDecodeError:
+        return {"ip": "127.0.0.1", "error_count": 3, "timeout": 1}
+
+def save_settings(settings):
+    with open(SETTINGS_FILE, 'w') as f:
+        json.dump(settings, f)

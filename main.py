@@ -1,30 +1,58 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 import time
-from services import Settings
+import services
+
+SETTINGS_FILE = 'tabels.json'
 
 app = Flask(__name__)
 
-
-
 @app.route('/')
 def root():
-    settings = Settings(2, 0)
-    if  settings.get_error() > 0 and request.remote_addr == "127.0.0.1":
-        time.sleep(1)
-        settings.edit_error(-1)
-        return request.remote_addr, 502
+    ip_address = request.remote_addr
+    settings = services.load_settings()
 
-    return { 
-        "message" : "Hello",
-        "errors" : settings.get_error(),
-        "ip" : request.remote_addr
-        }
+    for setting in settings:
+        if  setting['error_count']!= 0 and ip_address == setting['ip']:
+            time.sleep(setting['timeout'])
+            setting['error_count'] -= 1
+            services.save_settings(settings)
+            return "<h1>Bad Request 502</h1>", 502
+        else:
+            setting['error_count'] = setting['limit_error']
+            services.save_settings(settings)
+            return { 
+                "message" : "Hello",
+                "ip" : ip_address
+            }
+    
+    
 
 @app.route("/settings", methods=['GET', 'POST'])
 def settings():
 
     if request.method == 'POST':
-        print("ОК")
+        settings = services.load_settings()
+
+        ip = request.remote_addr
+        limit_error = request.form.get('limit_error')
+        timeout = request.form.get('timeout')
+
+        for setting in settings:
+            if setting['ip'] == ip:
+                setting['limit_error'] = int(limit_error)
+                setting['timeout'] = int(timeout)
+                services.save_settings(settings)
+                return redirect(url_for('/'))
+        
+        new_setting = {
+        'ip': ip,
+        'limit_error': int(limit_error),
+        'timeout': int(timeout),
+        'error_count': 0 
+        }
+        settings.append(new_setting)
+        services.save_settings(settings)
+        return redirect('/')
 
     return render_template('index.html')
 
