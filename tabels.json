@@ -1,1 +1,1 @@
-[{"ip": "127.0.0.1", "limit_error": 3, "error_count": 3, "timeout": 0}, {"ip": "127.0.0.3", "limit_error": 3, "error_count": 0, "timeout": 0}, {"ip": "127.0.0.1", "limit_error": 5, "timeout": 3, "error_count": 0}, {"ip": "192.168.1.4", "limit_error": 5, "timeout": 0, "error_count": 3}]
+[{"ip": "127.0.0.1", "limit_error": 3, "error_count": 3, "timeout": 0}, {"ip": "127.0.0.3", "limit_error": 3, "error_count": 0, "timeout": 0}, {"ip": "127.0.0.1", "limit_error": 5, "timeout": 3, "error_count": 0}, {"ip": "192.168.1.4", "limit_error": 5, "timeout": 0, "error_count": 4}]

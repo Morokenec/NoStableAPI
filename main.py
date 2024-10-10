@@ -16,14 +16,15 @@ def root():
             time.sleep(setting['timeout'])
             setting['error_count'] -= 1
             services.save_settings(settings)
-            return "<h1 style='text-align: center'>Bad Request 502</h1>", 502
+            return "<h1 style='text-align: center'>Bad Request 502</h1><a href = '/settings'>Настройки</a>", 502
         
 
     setting['error_count'] = setting['limit_error']
     services.save_settings(settings)
     return { 
-        "message" : "Hello",
-        "ip" : ip_address
+        "message" : "Hello user!",
+        "ip" : ip_address,
+        "settings": "/settings"
     }
     
 @app.route("/settings", methods=['GET', 'POST'])
@@ -38,6 +39,7 @@ def settings():
 
         for setting in settings:
             if setting['ip'] == ip:
+                setting['error_count'] = int(limit_error)
                 setting['limit_error'] = int(limit_error)
                 setting['timeout'] = int(timeout)
                 services.save_settings(settings)
