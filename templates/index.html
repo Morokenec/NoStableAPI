@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <title>Настройки</title>
+</head>
+<body>
+    <h1>Настройки</h1>
+    <form class="settings" method="post">
+        <label>Количество ошибок</label>
+        <input type="text" id="error-count"/>
+        <label>Время задержки</label>
+        <input type="text" id="error-count"/>
+        <button type="submit" class="generate-btn">Сохранить настройки</button>
+    </form>
+</body>
+</html>
